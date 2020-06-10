@@ -1,5 +1,7 @@
 #!/bin/bash
 declare -a board
+player=1
+system=0
 count=0
 boradPrint() {
 	for place in {1..9}
@@ -13,3 +15,10 @@ boradPrint() {
 	echo "${board[6]} | ${board[7]} | ${board[8]}"
 }
 boradPrint
+toss=$((RANDOM%2))
+if [ $toss -eq $player ]
+then
+	echo "Player won the toss and have chance to play first"
+else
+	echo "System won the toss and have chence to play first"
+fi
