@@ -1,20 +1,17 @@
-s#!/bin/bash
 
-flage=1
+#!/bin/bash
+
+flag=1
 declare -a board
 player=1
 system=0
 count=0
 #Printing Board
 boardPrint() {
-	#for place in {1..9}
-	#do
-		#board[((count++))]=
-	#done
 	echo "${board[0]} | ${board[1]} | ${board[2]}"
-	echo ---------
+	echo "-------"
 	echo "${board[3]} | ${board[4]} | ${board[5]}"
-	echo ---------
+	echo "-------"
 	echo "${board[6]} | ${board[7]} | ${board[8]}"
 }
 #Toss for first play
@@ -50,41 +47,136 @@ symbolAssigning() {
 		fi
 	fi
 }
-#boardPrint
 firstToss
 symbolAssigning
 
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 
-while (( flage >= 1 ))
-do
+winnigCheck() {
+		symbol=$1
+		winner=$2
+		if [[ ${board[0]} == $symbol && ${board[1]} == $symbol && ${board[2]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[3]} == $symbol && ${board[4]} == $symbol && ${board[5]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[6]} == $symbol && ${board[7]} == $symbol && ${board[8]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[0]} == $symbol && ${board[3]} == $symbol && ${board[6]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[1]} == $symbol && ${board[4]} == $symbol && ${board[7]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[2]} == $symbol && ${board[5]} == $symbol && ${board[8]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[0]} == $symbol && ${board[4]} == $symbol && ${board[8]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		elif [[ ${board[2]} == $symbol && ${board[4]} == $symbol && ${board[6]} == $symbol ]]
+		then
+			((count2++))
+			echo "==================$Winner is winner================="
+			exit
+		fi
+}
+
+matchTie() {
+	for (( count = 0; count <= 8; count++ ))
+	do
+		if [ -z "${board[count]}" ]
+		then
+			echo "match not tie"
+			count=9
+		elif (( $count ==  8 ))
+		then
+			echo "========= Match tie========"
+			exit
+		fi
+	done
+}
+
+
+playerPlay() {
+	echo "=========== player chance =========="
+	win="player"
+	boardPrint
+        read -p "please enter position where you want to put symbol: " playerPosition
+	if [ -z "${board[$playerPosition]}" ]
+	then
+		if (( $playerPosition >= 0 && $playerPosition <= 8 ))
+		then
+              		board[$playerPosition]=$playerSymbol
+			#symbol=$playerSymbol
+                	boardPrint
+                	winnigCheck $playerSymbol $win
+			matchTie
+		else
+			echo "envalid input place already taken"
+	    		playerPlay
+		fi
+	else
+
+		echo "envalid input place already taken"
+		playerPlay
+	fi
+}
+
+systemPlay() {
+	echo "============= system chance =============="
+	win2="System"
+        systemPosition=$((RANDOM%8))
+	if [ -z "${board[$systemPosition]}" ]
+	then
+        	board[$systemPosition]=$systemSymbol
+        	boardPrint
+        	winnigCheck $systemSymbol $win2
+		matchTie
+	else
+		systemPlay
+	fi
+	echo "============= system played =============="
+}
+
+
+gameStart() {
 	if [ $toss -eq $player ]
 	then
-		boardPrint
-		read -p "please enter position where you want to put symbol: " playerPosition
-		board[$playerPosition]=$playerSymbol
-		boardPrint
+		while [ $flag -eq 1 ]
+		do
+			playerPlay
+			echo "-------------------------------------"
+			systemPlay
+		done
 	else
-		systemPosition=$((RANDOM%9+1))
-		board[$systemPosition]=$systemSymbol
-		boardPrint
+		while [ $flag -eq 1  ]
+		do
+			systemPlay
+			echo "------------------------------------"
+			playerPlay
+		done
 	fi
-	flage=0
-done
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+gameStart
 
 
 
