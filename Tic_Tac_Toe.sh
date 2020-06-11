@@ -48,8 +48,6 @@ symbolAssigning() {
 	fi
 }
 
-echo "system symbol = $systemSymbol"
-echo "player symbol = $playerSymbol"
 #checking winning condition
 winnigCheck() {
 		symbol=$1
@@ -178,6 +176,9 @@ echo "=========Main========"
 firstToss
 #symbolAssigining function calling
 symbolAssigning
+echo "system symbol = $systemSymbol"
+echo "player symbol = $playerSymbol"
+
 #gameStart function calling
 gameStart
 
