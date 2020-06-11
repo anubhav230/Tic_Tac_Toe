@@ -47,66 +47,56 @@ symbolAssigning() {
 		fi
 	fi
 }
-firstToss
-symbolAssigning
 
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
-
+#checking winning condition
 winnigCheck() {
 		symbol=$1
 		winner=$2
 		if [[ ${board[0]} == $symbol && ${board[1]} == $symbol && ${board[2]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[3]} == $symbol && ${board[4]} == $symbol && ${board[5]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[6]} == $symbol && ${board[7]} == $symbol && ${board[8]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[0]} == $symbol && ${board[3]} == $symbol && ${board[6]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[1]} == $symbol && ${board[4]} == $symbol && ${board[7]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[2]} == $symbol && ${board[5]} == $symbol && ${board[8]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[0]} == $symbol && ${board[4]} == $symbol && ${board[8]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		elif [[ ${board[2]} == $symbol && ${board[4]} == $symbol && ${board[6]} == $symbol ]]
 		then
-			((count2++))
-			echo "==================$Winner is winner================="
+			echo "==================$winner is winner================="
 			exit
 		fi
 }
-
+#checking tie condition
 matchTie() {
 	for (( count = 0; count <= 8; count++ ))
 	do
 		if [ -z "${board[count]}" ]
 		then
 			echo "match not tie"
-			count=9
-		elif (( $count ==  8 ))
+			break
+		elif (( $count == 8 ))
 		then
 			echo "========= Match tie========"
 			exit
@@ -114,7 +104,7 @@ matchTie() {
 	done
 }
 
-
+#player playing game
 playerPlay() {
 	echo "=========== player chance =========="
 	win="player"
@@ -140,7 +130,8 @@ playerPlay() {
 	fi
 }
 
-systemPlay() {
+#system playing game
+systemRandomPlay() {
 	echo "============= system chance =============="
 	win2="System"
         systemPosition=$((RANDOM%8))
@@ -151,31 +142,43 @@ systemPlay() {
         	winnigCheck $systemSymbol $win2
 		matchTie
 	else
-		systemPlay
+		systemRandomPlay
 	fi
 	echo "============= system played =============="
 }
 
 
+
+systemPlay() {
+	echo "Syatem Play"
+}
+
+
+
+#game started
 gameStart() {
 	if [ $toss -eq $player ]
 	then
 		while [ $flag -eq 1 ]
 		do
 			playerPlay
-			echo "-------------------------------------"
-			systemPlay
+			systemRandomPlay
 		done
 	else
 		while [ $flag -eq 1  ]
 		do
-			systemPlay
-			echo "------------------------------------"
+			systemRandomPlay
 			playerPlay
 		done
 	fi
 }
 
+echo "=========Main========"
+#toss function calling
+firstToss
+#symbolAssigining function calling
+symbolAssigning
+#gameStart function calling
 gameStart
 
 
