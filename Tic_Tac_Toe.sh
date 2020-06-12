@@ -6,14 +6,18 @@ declare -a board
 player=1
 system=0
 count=0
+
 #Printing Board
 boardPrint() {
-	echo "${board[1]} | ${board[2]} | ${board[3]}"
-	echo "-------"
-	echo "${board[4]} | ${board[5]} | ${board[6]}"
-	echo "-------"
-	echo "${board[7]} | ${board[8]} | ${board[9]}"
+	echo "                                                      "
+	echo "              ${board[1]} | ${board[2]} | ${board[3]} "
+	echo "              --------"
+	echo "              ${board[4]} | ${board[5]} | ${board[6]} "
+	echo "              --------"
+	echo "              ${board[7]} | ${board[8]} | ${board[9]} "
+	echo "                                                      "
 }
+
 #Toss for first play
 firstToss() {
 	toss=$((RANDOM%2))
@@ -24,6 +28,7 @@ firstToss() {
 		echo "System won the toss and have chence to play first"
 	fi
 }
+
 #assiginig symbol for player and system
 symbolAssigning() {
 	if [ $toss -eq $player ]
@@ -217,9 +222,24 @@ cornerApproach() {
         then
                 board[9]="$systemSymbol"
 	else
-		systemRandomPlay
+		echo "===============Did not find any corner to block==========="
+		centreApproach
 	fi
 
+
+}
+
+#//function for Centre approach for system
+
+centreApproach() {
+	echo "==========centre blocking==========="
+	if [ -z "${board[5]}" ]
+	then
+		board[5]="$systemSymbol"
+	else
+		echo "=============There is no centre to blaock==checking Randomly==============="
+		systemRandomPlay
+	fi
 
 }
 
