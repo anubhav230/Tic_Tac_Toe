@@ -113,7 +113,8 @@ matchTie() {
 		else
 			if (( $count == 9 ))
 			then
-				echo "========= Match tie========"
+				boardPrint
+				echo "=================[[ Match tie ]]==============="
 				exit
 			fi
 		fi
@@ -173,19 +174,17 @@ systemPlay() {
 			echo "system win check"
 			player="system"
 			winnigCheck $systemSymbol $player
+			matchTie
 			board[$cellNumber]=""
 
-			if (( $cellNumber == 9 ))
-			then
-				echo "==============there is no cell for winning playing randon cell================="
-				opponentBlocking
-			fi
 		fi
 	done
+	opponentBlocking
 
 }
 #//function for blacking opponent place where he can win the game
 opponentBlocking() {
+	flag2=1
 	echo "==================================opponent Blocking=================================="
 	for (( cellBlock=1;cellBlock<10;cellBlock++ ))
 	do
@@ -196,14 +195,12 @@ opponentBlocking() {
 			winningCheckForOpp "$playerSymbol"
 			board[$cellBlock]=""
 
-			if [ $cellBlock -eq 9 ]
-			then
-				echo "=========Did not find any cell to block opponent======="
-
-				cornerApproach
-			fi
 		fi
 	done
+	if [ $flag2 -eq 1 ]
+	then
+		cornerApproach
+	fi
 }
 
 #//function for Corner Approach for System
@@ -250,34 +247,42 @@ winningCheckForOpp() {
         if [[ ${board[1]} == $symbol2 && ${board[2]} == $symbol2 && ${board[3]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
 		cellBlock=10
 	elif [[ ${board[4]} == $symbol2 && ${board[5]} == $symbol2 && ${board[6]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[7]} == $symbol2 && ${board[8]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[1]} == $symbol2 && ${board[4]} == $symbol2 && ${board[7]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[2]} == $symbol2 && ${board[5]} == $symbol2 && ${board[8]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[3]} == $symbol2 && ${board[6]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[1]} == $symbol2 && ${board[5]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	elif [[ ${board[3]} == $symbol2 && ${board[5]} == $symbol2 && ${board[7]} == $symbol2 ]]
         then
                 board[$cellBlock]="$systemSymbol"
+		flag2=2
                 cellBlock=10
 	fi
 }
