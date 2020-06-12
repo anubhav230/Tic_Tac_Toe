@@ -2,7 +2,6 @@
 
 flag=1
 declare -a board
-#EMPTY=''
 player=1
 system=0
 count=0
@@ -283,8 +282,6 @@ winningCheckForOpp() {
 }
 
 
-
-
 #game started
 gameStart() {
 	if [ $toss -eq $player ]
@@ -311,7 +308,6 @@ symbolAssigning
 
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
-
 
 #gameStart function calling
 gameStart
