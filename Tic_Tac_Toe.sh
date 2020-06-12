@@ -158,13 +158,6 @@ systemRandomPlay() {
 	echo "============= system played =============="
 }
 
-
-#systemWinCheck() {
-#	win="system"
-#	board[systemPosition]=$systemSymbol
-#	winningCheck $SystemSymbol $win
-#}
-
 #//System playe like a human by checking opponent places
 systemPlay() {
 	for (( cellNumber=1;cellNumber<10;cellNumber++ ))
@@ -179,7 +172,7 @@ systemPlay() {
 
 			if (( $cellNumber == 9 ))
 			then
-				echo "there is no cell for winning playing randon cell"
+				echo "==============there is no cell for winning playing randon cell================="
 				opponentBlocking
 			fi
 		fi
@@ -200,12 +193,34 @@ opponentBlocking() {
 
 			if [ $cellBlock -eq 9 ]
 			then
-				echo "=========Did not find any cell for blacking======="
+				echo "=========Did not find any cell to block opponent======="
 
-				systemRandomPlay
+				cornerApproach
 			fi
 		fi
 	done
+}
+
+#//function for Corner Approach for System
+cornerApproach() {
+	echo "==========corner blocking========="
+	if [ -z "${board[1]}" ]
+	then
+		board[1]="$systemSymbol"
+	elif [ -z "${board[3]}" ]
+	then
+		board[3]="$systemSymbol"
+	elif [ -z "${board[7]}" ]
+        then
+                board[7]="$systemSymbol"
+	elif [ -z "${board[9]}" ]
+        then
+                board[9]="$systemSymbol"
+	else
+		systemRandomPlay
+	fi
+
+
 }
 
 #//fuction to analysing player winning cells for blocking
