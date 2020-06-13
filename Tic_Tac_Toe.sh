@@ -8,13 +8,13 @@ count=0
 
 #Printing Board
 boardPrint() {
-	echo "                                                      "
-	echo "              ${board[1]} | ${board[2]} | ${board[3]} "
-	echo "              --------"
-	echo "              ${board[4]} | ${board[5]} | ${board[6]} "
-	echo "              --------"
-	echo "              ${board[7]} | ${board[8]} | ${board[9]} "
-	echo "                                                      "
+	printf "                                                      \n"
+	printf "               ${board[1]} | ${board[2]} | ${board[3]} \n"
+	printf "              ---------\n"
+	printf "               ${board[4]} | ${board[5]} | ${board[6]} \n"
+	printf "              ---------\n"
+	printf "               ${board[7]} | ${board[8]} | ${board[9]} \n"
+	printf "                                                      \n"
 }
 
 #Toss for first play
@@ -22,9 +22,11 @@ firstToss() {
 	toss=$((RANDOM%2))
 	if [ $toss -eq $player ]
 	then
-		echo "Player won the toss and have chance to play first"
+		printf "\n"
+		printf "Player won the toss and have chance to play first\n"
 	else
-		echo "System won the toss and have chence to play first"
+		printf "\n"
+		printf "System won the toss and have chence to play first\n"
 	fi
 }
 
@@ -51,6 +53,13 @@ symbolAssigning() {
 		fi
 	fi
 }
+#function for comming out of winnigCheck function
+winPlayerName() {
+	printf "\n"
+	printf "======================[[ $winner is winner ]]=================\n"
+        boardPrint
+        exit
+}
 
 #checking winning condition
 winnigCheck() {
@@ -58,44 +67,28 @@ winnigCheck() {
 		winner=$2
 		if [[ ${board[1]} == $symbol && ${board[2]} == $symbol && ${board[3]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[4]} == $symbol && ${board[5]} == $symbol && ${board[6]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[7]} == $symbol && ${board[8]} == $symbol && ${board[9]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[1]} == $symbol && ${board[4]} == $symbol && ${board[7]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[2]} == $symbol && ${board[5]} == $symbol && ${board[8]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[3]} == $symbol && ${board[6]} == $symbol && ${board[9]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[1]} == $symbol && ${board[5]} == $symbol && ${board[9]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		elif [[ ${board[3]} == $symbol && ${board[5]} == $symbol && ${board[7]} == $symbol ]]
 		then
-			echo "==================$winner is winner================="
-			boardPrint
-			exit
+			winPlayerName
 		fi
 }
 
@@ -112,7 +105,8 @@ matchTie() {
 			if (( $count == 9 ))
 			then
 				boardPrint
-				echo "=================[[ Match tie ]]==============="
+				printf "\n"
+				printf "=================[[ Match tie ]]===============\n"
 				exit
 			fi
 		fi
@@ -121,33 +115,34 @@ matchTie() {
 
 #//player playing game
 playerPlay() {
-	echo "=========== player chance =========="
 	win="player"
 	boardPrint
-        read -p "please enter position where you want to put symbol: " playerPosition
+        read -p "Player chance enter cell number: " playerPosition
 	if [ -z "${board[$playerPosition]}" ]
 	then
 		if (( $playerPosition >= 1 && $playerPosition <= 9 ))
 		then
               		board[$playerPosition]=$playerSymbol
 			#symbol=$playerSymbol
-                	boardPrint
+                	#boardPrint
                 	winnigCheck $playerSymbol $win
 			matchTie
 		else
-			echo "envalid input place already taken"
+			printf "\n"
+			printf "envalid input place already taken\n"
 	    		playerPlay
 		fi
 	else
-
-		echo "Invalid input place already taken"
+		printf "\n"
+		printf "Invalid input place already taken\n"
 		playerPlay
 	fi
 }
 
 #//system playing game with help of RANDOM fuction so if system will not have any cell to planed positiion
 systemRandomPlay() {
-	echo "============= system chance =============="
+	printf "\n"
+	printf "============= system chance ==============\n"
 	win2="System"
         systemPosition=$((RANDOM%9+1))
 	if [ -z "${board[$systemPosition]}" ]
@@ -159,11 +154,12 @@ systemRandomPlay() {
 	else
 		systemRandomPlay
 	fi
-	echo "============= system played =============="
 }
 
 #//System playe like a human by checking opponent places
 systemPlay() {
+	printf "\n"
+	printf "============== System played ==============\n"
 	for (( cellNumber=1;cellNumber<10;cellNumber++ ))
 	do
 		if [ -z "${board[$cellNumber]}" ]
@@ -182,7 +178,6 @@ systemPlay() {
 #//function for blacking opponent place where he can win the game
 opponentBlocking() {
 	flag2=1
-	echo "==================================opponent Blocking=================================="
 	for (( cellBlock=1;cellBlock<10;cellBlock++ ))
 	do
 		if [ -z "${board[$cellBlock]}" ]
@@ -201,7 +196,6 @@ opponentBlocking() {
 
 #//function for Corner Approach for System
 cornerApproach() {
-	echo "==========corner blocking========="
 	if [ -z "${board[1]}" ]
 	then
 		board[1]="$systemSymbol"
@@ -215,7 +209,6 @@ cornerApproach() {
         then
                 board[9]="$systemSymbol"
 	else
-		echo "===============Did not find any corner to block==========="
 		centreApproach
 	fi
 
@@ -223,17 +216,21 @@ cornerApproach() {
 }
 
 #//function for Centre approach for system
-
 centreApproach() {
-	echo "==========centre blocking==========="
 	if [ -z "${board[5]}" ]
 	then
 		board[5]="$systemSymbol"
 	else
-		echo "=============There is no centre to blaock==checking Randomly==============="
 		systemRandomPlay
 	fi
 
+}
+
+#function for comming out for winningCheckForOpp function
+exitingFromOppBlockingLoop() {
+	board[$cellBlock]="$systemSymbol"
+        flag2=2
+        cellBlock=10
 }
 
 #//fuction to analysing player winning cells for blocking
@@ -242,44 +239,28 @@ winningCheckForOpp() {
         symbol2=$1
         if [[ ${board[1]} == $symbol2 && ${board[2]} == $symbol2 && ${board[3]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-		cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[4]} == $symbol2 && ${board[5]} == $symbol2 && ${board[6]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[7]} == $symbol2 && ${board[8]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[1]} == $symbol2 && ${board[4]} == $symbol2 && ${board[7]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[2]} == $symbol2 && ${board[5]} == $symbol2 && ${board[8]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[3]} == $symbol2 && ${board[6]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[1]} == $symbol2 && ${board[5]} == $symbol2 && ${board[9]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	elif [[ ${board[3]} == $symbol2 && ${board[5]} == $symbol2 && ${board[7]} == $symbol2 ]]
         then
-                board[$cellBlock]="$systemSymbol"
-		flag2=2
-                cellBlock=10
+		exitingFromOppBlockingLoop
 	fi
 }
 
@@ -304,14 +285,14 @@ gameStart() {
 	fi
 }
 
-echo "=========Main========"
+#========= Main ========"
 #toss function calling
 firstToss
 #symbolAssigining function calling
 symbolAssigning
-
-echo "system symbol = $systemSymbol"
-echo "player symbol = $playerSymbol"
+printf "\n"
+printf "system symbol = $systemSymbol\n"
+printf "player symbol = $playerSymbol\n"
 
 
 #gameStart function calling
