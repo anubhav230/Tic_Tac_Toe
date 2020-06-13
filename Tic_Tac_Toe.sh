@@ -140,7 +140,7 @@ playerPlay() {
 		fi
 	else
 
-		echo "envalid input place already taken"
+		echo "Invalid input place already taken"
 		playerPlay
 	fi
 }
